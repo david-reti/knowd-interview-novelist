@@ -1,5 +1,4 @@
 // Source: https://www.npmjs.com/package/wink-bm25-text-search
-
 // BM25 is a popular lexical search algorithm for sparse retrieval
 
 const bm25 = require("wink-bm25-text-search");
