@@ -6,20 +6,25 @@ import {Stripe, Gmail, Alexa} from "../assets/dataset";
 const dataset = [...Stripe, ...Gmail, ...Alexa].map((text) => ({text}));
 const engine = Engine(dataset);
 
+/*
+    This is the main page of the app - it includes the search input centered on the screen
+    The main function of this page is to wrap the input (and later potentially other components)
+    With the search state and logic needed by them.
+*/
 const SearchPage = () => {
-    const [query, setQuery] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
+    const [searchResults, setSearchResults] = useState({query: "", suggestions: []});
 
+    // Carry out a search - this involves calling the search engine and updating the search state
     const search = searchQuery => {
-        setQuery(() => {
-            setSuggestions(Search(engine, searchQuery).map((item) => dataset[item[0]].text));
-            return searchQuery;
+        setSearchResults(() => {
+            const searchResults = Search(engine, searchQuery).map((item) => dataset[item[0]].text);
+            return {query: searchQuery, suggestions: searchResults};
         });
     }
 
     return (
         <div className="container h-full flex justify-center items-center">
-            <SearchInput query={query} search={search} searchSuggestions={suggestions}/>
+            <SearchInput query={searchResults.query} search={search} searchSuggestions={searchResults.suggestions}/>
         </div>
     )
 }
