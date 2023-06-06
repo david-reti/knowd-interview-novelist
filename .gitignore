@@ -17,6 +17,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+/public/models
+embeddings.dat
 
 npm-debug.log*
 yarn-debug.log*

@@ -15,15 +15,17 @@ const SearchInput = ({query, search, searchSuggestions}) => {
             </div>
 
             {/* List of search suggestions - the container's max height is animated for a smoother transition */}
-            <div className={"flex flex-col h-fit overflow-y-auto transition-[max-height] duration-200 " + (searchSuggestions.length > 0 ? "max-h-64 p-1" : "max-h-0")}>
+            <ul className={"flex flex-col h-fit overflow-y-auto transition-[max-height] duration-200 " + (searchSuggestions.length > 0 ? "max-h-64 p-1" : "max-h-0")}>
                 {searchSuggestions.map((suggestion, i) =>
-                    <button key={i} className="p-3 leading-4 w-ful hover:bg-gray-300 text-left whitespace-nowrap overflow-clip text-ellipsis" onClick={() => alert(`Selected: ${suggestion}`)}>
-                        &#128211; {suggestion}
-                    </button>
+                    <li className="overflow-x-clip" key={i}>
+                        <button className="p-3 leading-4 w-ful hover:bg-gray-300 text-left whitespace-nowrap text-ellipsis" onClick={() => alert(`Selected: ${suggestion}`)}>
+                            &#128211; {suggestion}
+                        </button>
+                    </li>
                 )}
-            </div>
+            </ul>
         </label>
-    )
+    );
 }
 
 export { SearchInput }
