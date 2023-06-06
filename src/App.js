@@ -7,10 +7,11 @@ const dataset = [...Stripe, ...Gmail, ...Alexa].map((text) => ({text}));
 
 // If this is true, then all the vectors will be generated from scratch and downloaded in a file
 // Otherwise, pre-computed vectors will be fetched which is faster. 
-const GENERATE_EMBEDDINGS = true; 
+const GENERATE_EMBEDDINGS = false; 
 
 const App = () => {
     const worker = useRef(null);
+    const [loading, setLoading] = useState(true);
     const [searchResults, setSearchResults] = useState({query: "", suggestions: []});
 
     const handleWorkerEvents = useCallback(e => {
@@ -49,7 +50,10 @@ const App = () => {
                 break;
             // When all the embeddings have been generated, download them as a binary file
             case 'complete':
-                saveAs(new Blob(e.data.embeddings.map(embedding => embedding.vector)), "embeddings.dat");
+                setLoading(false);
+                if(GENERATE_EMBEDDINGS) {
+                    saveAs(new Blob(e.data.embeddings.map(embedding => embedding.vector)), "embeddings.dat");
+                }
                 break;
             default:
                 break;
@@ -69,7 +73,7 @@ const App = () => {
 
     return (
         <div className="w-screen h-screen bg-gray-200">
-            <SearchPage searchResults={searchResults} setSearchResults={setSearchResults} worker={worker}/>
+            <SearchPage loading={loading} searchResults={searchResults} worker={worker}/>
             <p className="absolute bottom-2 right-2 text-gray-600">Knowd Technical Interview - David Reti</p>
         </div>
     );

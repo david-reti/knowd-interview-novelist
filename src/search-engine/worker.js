@@ -1,5 +1,8 @@
 import { HNSW } from "hnsw";
-import { AutoModel, AutoTokenizer } from "@xenova/transformers";
+import { AutoModel, AutoTokenizer, env } from "@xenova/transformers";
+
+// The built-in cache seems to be buggy - it often corrupts or raises security errors
+env.useBrowserCache = false;
 
 let embeddings = [];
 const hnsw = new HNSW();
@@ -30,6 +33,11 @@ self.addEventListener('message', async e => {
             // Assemble the embeddings from the chunks of float values and the corresponding key
             embeddings = e.data.dataset.slice(0, 10).map((data, i) => ({id: data.text, vector: floats[i]}));
             await hnsw.buildIndex(embeddings);
+
+            self.postMessage({
+                type: 'complete',
+                embeddings: embeddings
+            });
             break;
         // When the dataset is being indexed, all the embeddings are generated then sent to the main thread to allow them to be downloaded 
         case 'index':
