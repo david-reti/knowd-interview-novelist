@@ -31,7 +31,7 @@ self.addEventListener('message', async e => {
             }, []);
              
             // Assemble the embeddings from the chunks of float values and the corresponding key
-            embeddings = e.data.dataset.slice(0, 10).map((data, i) => ({id: data.text, vector: floats[i]}));
+            embeddings = e.data.dataset.map((_, i) => ({id: i, vector: floats[i]}));
             await hnsw.buildIndex(embeddings);
 
             self.postMessage({
@@ -46,8 +46,8 @@ self.addEventListener('message', async e => {
                 const vector = await embed(item.text);
                 
                 i++;
-                embeddings.push({id: item.text, vector: vector.data});
-                console.log(`Generating embeddings: ${i / e.data.items.length}%`);
+                embeddings.push({id: i, vector: vector.data});
+                console.log(`Generating embeddings: ${i * 100 / e.data.items.length}%`);
             }
            
             await hnsw.buildIndex(embeddings);

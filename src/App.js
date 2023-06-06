@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SearchPage } from './pages/SearchPage';
-import { Stripe, Gmail, Alexa } from "./assets/dataset";
 import { saveAs } from "file-saver";
-
-const dataset = [...Stripe, ...Gmail, ...Alexa].map((text) => ({text}));
+import { dataset } from "./assets/dataset";
 
 // If this is true, then all the vectors will be generated from scratch and downloaded in a file
 // Otherwise, pre-computed vectors will be fetched which is faster. 
@@ -12,7 +10,7 @@ const GENERATE_EMBEDDINGS = false;
 const App = () => {
     const worker = useRef(null);
     const [loading, setLoading] = useState(true);
-    const [searchResults, setSearchResults] = useState({query: "", suggestions: []});
+    const [searchResults, setSearchResults] = useState({suggestions: []});
 
     const handleWorkerEvents = useCallback(e => {
         switch(e.data.type) {
@@ -73,7 +71,7 @@ const App = () => {
 
     return (
         <div className="w-screen h-screen bg-gray-200">
-            <SearchPage loading={loading} searchResults={searchResults} worker={worker}/>
+            <SearchPage loading={loading} searchResults={searchResults} setSearchResults={setSearchResults} worker={worker}/>
             <p className="absolute bottom-2 right-2 text-gray-600">Knowd Technical Interview - David Reti</p>
         </div>
     );

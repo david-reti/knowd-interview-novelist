@@ -1182,8 +1182,6 @@ const Stripe = [...Stripe_1, ...Stripe_2, ...Stripe_3]
 const Gmail = [...Gmail_1, ...Gmail_2, ...Gmail_3]
 const Alexa = [...Alexa_1, ...Alexa_2, ...Alexa_3]
 
-export {
-    Stripe,
-    Gmail,
-    Alexa
-};
+const dataset = [...Stripe, ...Gmail, ...Alexa].map((text) => ({text}));
+
+export { dataset };

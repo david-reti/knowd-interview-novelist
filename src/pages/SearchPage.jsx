@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { SearchInput } from "../components/SearchInput"
 
 /*
@@ -5,14 +6,18 @@ import { SearchInput } from "../components/SearchInput"
     The main function of this page is to wrap the input (and later potentially other components)
     With the search state and logic needed by them.
 */
-const SearchPage = ({loading, searchResults, worker}) => {
+const SearchPage = ({loading, setSearchResults, searchResults, worker}) => {
     // Carry out a search - this involves calling the search engine and updating the search state
-    const search = searchQuery => {
-        worker.current.postMessage({
-            type: 'search',
-            text: searchQuery
-        });
-    }
+    const search = useCallback(searchQuery => {
+        if(searchQuery) {
+            worker.current.postMessage({
+                type: 'search',
+                text: searchQuery
+            });
+        } else {
+            setSearchResults({suggestions: []});
+        }
+    }, [ setSearchResults, worker ]);
 
     // Return either the loading screen, or a page with the search input in the middle
     return (
