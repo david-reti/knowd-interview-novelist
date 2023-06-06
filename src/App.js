@@ -10,7 +10,7 @@ const GENERATE_EMBEDDINGS = false;
 const App = () => {
     const worker = useRef(null);
     const [loading, setLoading] = useState(true);
-    const [searchResults, setSearchResults] = useState({suggestions: []});
+    const [searchResults, setSearchResults] = useState({query: "", suggestions: []});
 
     const handleWorkerEvents = useCallback(e => {
         switch(e.data.type) {
@@ -43,7 +43,8 @@ const App = () => {
             // When search results come in, update the state which is reflected on the search page
             case 'search_results':
                 setSearchResults({
-                    suggestions: e.data.results.map(result => result.id)
+                    suggestions: e.data.results.map(result => result.id),
+                    query: e.data.query
                 });
                 break;
             // When all the embeddings have been generated, download them as a binary file

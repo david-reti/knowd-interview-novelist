@@ -15,7 +15,8 @@ const SearchPage = ({loading, setSearchResults, searchResults, worker}) => {
                 text: searchQuery
             });
         } else {
-            setSearchResults({suggestions: []});
+            // If the search query is empty, clean out all the search results (reset to empty array)
+            setSearchResults({query: "", suggestions: []});
         }
     }, [ setSearchResults, worker ]);
 
@@ -26,7 +27,7 @@ const SearchPage = ({loading, setSearchResults, searchResults, worker}) => {
                 <h2 className="text-2xl mt-12 ml-12">Loading model and precomputed embeddings...</h2>
             </div> : 
             <div className="container mx-auto h-full flex justify-center items-center">
-                <SearchInput search={search} searchSuggestions={searchResults.suggestions}/>
+                <SearchInput search={search} searchResults={searchResults}/>
             </div>
     );
 }

@@ -24,9 +24,9 @@ self.addEventListener('message', async e => {
         // When the embeddings are loaded from a file, the float value are split into chunks and matched with the dataset
         case 'load_embeddings':
             // Split the array into chunks of 1024 elements, one for each key in the dataset
-            const floats = e.data.embeddings.reduce((all,one,i) => {
-                const ch = Math.floor(i/1024); 
-                all[ch] = [].concat((all[ch]||[]),one); 
+            const floats = e.data.embeddings.reduce((all, one, i) => {
+                const ch = Math.floor(i / 1024); 
+                all[ch] = [].concat((all[ch] || []), one); 
                 return all;
             }, []);
              
@@ -67,7 +67,8 @@ self.addEventListener('message', async e => {
 
             self.postMessage({
                 type: 'search_results',
-                results: results
+                query: e.data.text,
+                results: results,
             });
             break;
         default:
